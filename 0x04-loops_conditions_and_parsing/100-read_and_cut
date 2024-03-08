@@ -7,3 +7,4 @@ while IFS=: read -r -a arr;
 	do
     	echo "${arr[0]}:${arr[2]}:${arr[6]}"
 	done <<< "$var"
+
