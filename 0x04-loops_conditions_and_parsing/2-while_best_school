@@ -8,3 +8,4 @@ while [ $counter -gt 0 ]
 		counter=$(( counter - 1 ))
 		echo "Best School"
 	done
+

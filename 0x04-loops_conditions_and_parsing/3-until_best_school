@@ -8,3 +8,4 @@ until [ $counter -eq 0 ]
 		((counter--))
 		echo "Best School"
 	done
+
