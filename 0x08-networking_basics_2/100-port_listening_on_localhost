@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Listen on port 98 on localhost using netcat (nc)
+# Pings localhost 98 times.
+# This works with nc (Netcat
 
 nc -l -p 98
 

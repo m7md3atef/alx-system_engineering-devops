@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # ping 5 times
+# Using ifconfig to get network interface details and piping the output to grep to extract IPv4 addresses
 
 # Get the list of network interfaces
+# The cut command trims the output to show only the IP addresses without the 'inet addr:' prefix
 interfaces=$(ifconfig -a | grep 'inet ' | awk '{print $2}')
 
 # Loop through each interface and extract the IPv4 addresses
