@@ -12,4 +12,3 @@ if __name__ == '__main__':
             sys.argv[0]))
     else:
         result = count_words(sys.argv[1], [x for x in sys.argv[2].split()])
-        
