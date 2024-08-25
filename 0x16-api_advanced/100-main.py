@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-100-main file
+100-main
 """
 import sys
 
