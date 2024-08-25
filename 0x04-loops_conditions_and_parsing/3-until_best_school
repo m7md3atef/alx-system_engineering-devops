@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This script is writing "Best School" 10 times
+
+counter=10
+
+until [ $counter -eq 0 ]
+	do
+		((counter--))
+		echo "Best School"
+	done
+
