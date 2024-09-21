@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Bash script that configures a new Ubuntu machine with Nginx and sets up redirection for /redirect_me while displaying "Hello World!" on the main page.
+
+# Update package index and upgrade installed packages
+sudo apt-get update -y && sudo apt-get upgrade -y
+
+# Install Nginx
+sudo apt-get install -y nginx
+
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Change ownership of the web directory to the current user
+sudo chown -R "$USER":"$USER" /var/www/html
+
+# Create index.html with "Hello World!"
+echo 'Hello World!' | sudo tee /var/www/html/index.html > /dev/null
+
+# Configure Nginx to redirect /redirect_me to the YouTube video
+redirect_block="location /redirect_me {\n    return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n}"
+# Insert the redirect block before the closing '}' in the server block of the default configuration
+sudo sed -i "/^}/i \ \ \ \ $redirect_block" /etc/nginx/sites-available/default
+
+# Restart Nginx to apply the configuration changes
+sudo service nginx restart
+
+echo "Nginx setup complete. Main domain shows 'Hello World!' and /redirect_me redirects to the specified URL."

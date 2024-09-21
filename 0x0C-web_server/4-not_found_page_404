@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Bash script to configure an Nginx server with a "Hello World!" main page,
+# a custom 404 page, and a redirection for requests containing "redirect_me".
+
+# Update and upgrade system packages
+sudo apt-get update -y && sudo apt-get upgrade -y
+
+# Install Nginx
+sudo apt-get install -y nginx
+
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Set ownership of the web directory to the current user
+sudo chown -R "$USER":"$USER" /var/www/html
+
+# Create the main index page with "Hello World!"
+echo 'Hello World!' | sudo tee /var/www/html/index.html > /dev/null
+
+# Create a custom 404 page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+
+# Define the Nginx configuration with custom error page and redirection
+nginx_config=\
+"server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+    
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+    
+    # Custom 404 error page
+    error_page 404 /404.html;
+    location /404.html {
+        internal;
+    }
+
+    # Redirect requests containing 'redirect_me' to YouTube
+    if (\$request_uri ~* /redirect_me) {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+"
+
+# Write the new configuration to Nginx's default site
+echo "$nginx_config" | sudo tee /etc/nginx/sites-available/default > /dev/null
+
+# Start or restart Nginx based on its running status
+if ! pgrep -x "nginx" > /dev/null; then
+    sudo service nginx start
+else
+    sudo service nginx restart
+fi
+
+echo "Nginx setup complete: Main domain shows 'Hello World!', requests containing 'redirect_me' are redirected, and a custom 404 page is configured."
